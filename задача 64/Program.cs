@@ -1,38 +1,20 @@
-﻿int digre = ReadComand("Ввдите количество строк");
-int[] array = new int[1];
-int index = 0;
-int numb = 1;
+﻿int number = ReadComand("Введите число: ");
+SequenceNumbers(number);
 
-while (index <= digre)
-{ 
-    
-    for(int i = 0; i < array.Length; i++)
-    {
-        array[i] = numb; 
-        for(int j = 1; j < array.Length - 1; j++)
-        {
-            array[j] = array[i] + array[i];
-            
-        }
-        
-    }
-    PrintArray2D(array);
-    Console.WriteLine();
-    
-    array = new int[array.Length+1];
-    index++;
-    
-}
-
-void PrintArray2D(int[] array)
+int SequenceNumbers(int num)
 {
-    for (int i = 0; i < array.Length; i++)
+    if (num <= 0)
+        return 1;
+    
+    else
     {
-        Console.Write(array[i] + " ");
+        int temp = num;
+        Console.Write(temp + " ");
+        SequenceNumbers(num - 1);
+
+        return temp;
     }
 }
-
-
 
 int ReadComand(string message)
 {
