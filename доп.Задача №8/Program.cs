@@ -1,52 +1,66 @@
-﻿string separatedNumbers = ReadCommand("Введите числа через пробел: ");
-int countComma = CommaCounter(separatedNumbers);
-string[] substring = new string[countComma];
-SetNumbers(substring, separatedNumbers);
-PrintArray(substring);
+﻿string separatedNumbers = ReadCommand("Введите числа через пробел: ") + " ";
+int[] arrayNumber = SetNumbers(separatedNumbers);
+
+PrintArray(arrayNumber);
 bool isValid = true;
 
 while (isValid)
 {
-    int comand = Convert.ToInt32(ReadCommand("Выберите номер команды: 1.создать массив чисел"));
+    Console.WriteLine();
+    int comand = Convert.ToInt32(
+        ReadCommand(
+            "Выберите номер команды: 1.Добавить элементы в массив 2.Удалить число из массива\n3.Посчитать сумму всех элентов массива. 4.Показать текущий массив 5.Завершить программу: "
+        )
+    );
     switch (comand)
     {
         case 1:
-        int addElem = Convert.ToInt32(ReadCommand("Введите число которое хотите добавить в массив"));
-            string[] newarray = AddNumbers(substring, addElem);
+            string addElem =
+                ReadCommand("Введите числa через пробел что бы добавить их в массив: ") + " ";
+            int[] newArrayNumber = SetNumbers(addElem);
+            arrayNumber = AddNumbers(arrayNumber, newArrayNumber);
             break;
-            case 2:
+        case 2:
+            int delNumber = Convert.ToInt32(
+                ReadCommand("Введите число которое хотите удалить из массива: ")
+            );
+            arrayNumber = RemoveNumbers(arrayNumber, delNumber);
             break;
-            case 3:
-            int delNumber = Convert.ToInt32(ReadCommand("Введите число которое хотите удалить из массива"));
-            RemoveNumbers(substring, delNumber);
+        case 3:
+            Sum(arrayNumber);
             break;
-            case 4:
-            Sum(substring);
+        case 4:
+        PrintArray(arrayNumber);
             break;
             case 5:
+            Console.WriteLine("Программа завершена!!!");
             isValid = false;
+            break;
+        default:
+            Console.WriteLine("Вы ввели несуществующую команду!");
             break;
     }
 }
 
-string[] RemoveNumbers(string[] arr, int number)
+int[] RemoveNumbers(int[] arr, int delNumber)
 {
-    string[] newArray = new string[arr.Length - 1];
+    int startIndex = 0;
+    for (int i = 0; i < arr.Length; i++)
+    {
+        if (arr[i] != delNumber)
+        {
+            arr[startIndex++] = arr[i];
+        }
+    }
+    int[] newArray = new int[startIndex];
     for (int i = 0; i < newArray.Length; i++)
     {
-        if (Convert.ToInt32(arr[i]) != number)
-        {
-            newArray[i] = Convert.ToString(arr[i]);
-        }
-        else if (Convert.ToInt32(arr[i]) == number)
-        {
-            newArray[i] = Convert.ToString(arr[i + 1]);
-        }
+        newArray[i] = arr[i];
     }
     return newArray;
 }
 
-void Sum(string[] array)
+void Sum(int[] array)
 {
     int sum = 0;
     for (int i = 0; i < array.Length; i++)
@@ -56,31 +70,25 @@ void Sum(string[] array)
     Console.Write($"Сумма элементов в массиве {sum}");
 }
 
-string[] AddNumbers(string[] arr, int addElem)
+int[] AddNumbers(int[] arr, int[] newArr)
 {
-    string[] newArray = new string[arr.Length + 1];
+    int[] newArray = new int[arr.Length + newArr.Length];
+
+    int startIndex = arr.Length;
+
     for (int i = 0; i < arr.Length; i++)
     {
         newArray[i] = arr[i];
     }
-    newArray[arr.Length] = Convert.ToString(addElem);
+    for (int j = 0; j < newArr.Length; j++)
+    {
+        newArray[startIndex] = newArr[j];
+        startIndex++;
+    }
     return newArray;
 }
 
-int CommaCounter(string number)
-{
-    int count = 1;
-    for (int i = 0; i < number.Length; i++)
-    {
-        if (number[i] == ' ')
-        {
-            count++;
-        }
-    }
-    return count;
-}
-
-void PrintArray(string[] arr)
+void PrintArray(int[] arr)
 {
     for (int i = 0; i < arr.Length; i++)
     {
@@ -88,20 +96,33 @@ void PrintArray(string[] arr)
     }
 }
 
-void SetNumbers(string[] array, string number)
+int[] SetNumbers(string number)
 {
-    int startIndex = 0;
-    for (int i = 0; i < separatedNumbers.Length; i++)
+    int count = 0;
+    for (int i = 0; i < number.Length; i++)
     {
-        if (separatedNumbers[i] != ' ')
+        if (number[i] == ' ')
         {
-            substring[startIndex] += separatedNumbers[i];
+            count++;
+        }
+    }
+    int[] arr = new int[count];
+    int startIndex = 0;
+    string strNumber = "";
+    for (int i = 0; i < number.Length; i++)
+    {
+        if (number[i] != ' ')
+        {
+            strNumber += number[i];
         }
         else
         {
+            arr[startIndex] = Convert.ToInt32(strNumber);
             startIndex++;
+            strNumber = "";
         }
     }
+    return arr;
 }
 
 string ReadCommand(string message)
