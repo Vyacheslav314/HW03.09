@@ -16,7 +16,7 @@ while (isValid)
     Console.WriteLine();
     int command = Convert.ToInt32(
         ReadCommand(
-            "Выберите номер команды: 1.Добавить досье 2.Удалить данные сотрудника\n3. Найти данные сотрудника по ФИО. 4.Получить данные всех сотрудников по должности\n5.Всего расходы на выплаты заработной платы 6.Найти заработные платы больше или меньше указанной\n7.Чтобы вывести все досье 8.Чтобы завершить работу программы "
+            "Выберите номер команды:\n1.Добавить досье\n2.Удалить данные сотрудника\n3.Найти данные сотрудника по ФИО\n4.Получить данные всех сотрудников по должности\n5.Всего расходы на выплаты заработной платы\n6.Найти заработные платы больше или меньше указанной\n7.Чтобы вывести все досье\n8.Чтобы завершить работу программы "
         )
     );
     switch (command)
@@ -30,33 +30,48 @@ while (isValid)
             wages = AddData(wages, addWages);
             break;
         case 2:
+            PrintArray(userData, post, wages);
             int numberUser = Convert.ToInt32(
-                ReadCommand("Укажите номер сотрудника который необходимо удалить: ")
+                ReadCommand("Укажите ID сотрудника который необходимо удалить: ")
             );
             userData = RemoveData(userData, numberUser);
             post = RemoveData(post, numberUser);
             wages = RemoveData(wages, numberUser);
+            if(numberUser > userData.Length && numberUser >= 1)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Такого сотрудника не числится проверьте правильность написания ID! ");
+                break;
+            }
             break;
         case 3:
             string userName = ReadCommand("Введите ФИО работаника: ");
-            SearchUserData(userData, post, wages, userName);
+            SearchAndPrintUserData(userData, post, wages, userName);
             break;
         case 4:
             string userPost = ReadCommand("Введите должность ");
-            SearchUserPost(post, userData, wages, userPost);
+            SearchAndPrintUserPost(post, userData, wages, userPost);
             break;
         case 5:
             int sum = Sum(wages);
             Console.Write($"Всего на выплаты заработной платы {sum}");
             break;
         case 6:
-            int com = Convert.ToInt32(
+            int subCommand = Convert.ToInt32(
                 ReadCommand(
                     "Введите 1 если хотите увидеть заработные платы выше вашей и 2 если ниже: "
                 )
             );
+            if(subCommand <= 2 && subCommand > 0)
+            {
             int midleWages = Convert.ToInt32(ReadCommand("Введите сумму: "));
-            SearchUserWages(wages, post, userData, midleWages, com);
+            SearchAndPrintUserWages(wages, post, userData, midleWages, subCommand);
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("Такой команды нет!!!");
+            }
             break;
         case 7:
             PrintArray(userData, post, wages);
@@ -71,7 +86,7 @@ while (isValid)
     }
 }
 
-void SearchUserWages(string[] userWages, string[] userPost, string[] data, int wages, int com)
+void SearchAndPrintUserWages(string[] userWages, string[] userPost, string[] data, int wages, int com)
 {
     if (com == 1)
     {
@@ -81,7 +96,7 @@ void SearchUserWages(string[] userWages, string[] userPost, string[] data, int w
             if (Convert.ToInt32(userWages[i]) >= wages)
             {
                 Console.Write(
-                    $"ФИО: {data[i]}\nДолжность: {userPost[i]}\nЗаработная плата: {userWages[i]}"
+                    $"\nФИО: {data[i]}\nДолжность: {userPost[i]}\nЗаработная плата: {userWages[i]}"
                 );
                 Console.WriteLine();
                 count++;
@@ -113,28 +128,28 @@ void SearchUserWages(string[] userWages, string[] userPost, string[] data, int w
     }
 }
 
-void SearchUserPost(string[] userPost, string[] data, string[] userWages, string post)
+void SearchAndPrintUserPost(string[] userPost, string[] data, string[] userWages, string post)
 {
     for (int i = 0; i < userPost.Length; i++)
     {
         if (userPost[i] == post)
         {
             Console.Write(
-                $"ФИО: {data[i]}\nДолжность: {userPost[i]}\nЗаработная плата: {userWages[i]}"
+                $"\nФИО: {data[i]}\nДолжность: {userPost[i]}\nЗаработная плата: {userWages[i]}"
             );
             Console.WriteLine();
         }
     }
 }
 
-void SearchUserData(string[] data, string[] userPost, string[] userWages, string userName)
+void SearchAndPrintUserData(string[] data, string[] userPost, string[] userWages, string userName)
 {
     for (int i = 0; i < data.Length; i++)
     {
         if (data[i] == userName)
         {
             Console.Write(
-                $"ФИО: {data[i]}\nДолжность: {userPost[i]}\nЗаработная плата: {userWages[i]}"
+                $"\nФИО: {data[i]}\nДолжность: {userPost[i]}\nЗаработная плата: {userWages[i]}"
             );
             Console.WriteLine();
         }
@@ -186,7 +201,7 @@ void PrintArray(string[] data, string[] userPost, string[] userWages)
 {
     for (int i = 0; i < data.Length; i++)
     {
-        Console.Write($"ФИО: {data[i]}\nДолжность: {userPost[i]}\nЗаработная плата: {userWages[i]}");
+        Console.Write($"\nID Сотрудника {i + 1}\nФИО: {data[i]}\nДолжность: {userPost[i]}\nЗаработная плата: {userWages[i]}");
         Console.WriteLine();
     }
 }
