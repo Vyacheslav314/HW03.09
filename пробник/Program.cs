@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows;
-
-int[,] array2d = new int[,]
+﻿int[,] array2d = new int[,]
 {
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
     { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -19,51 +16,55 @@ int[,] array2d = new int[,]
 };
 
 PrintArray(array2d);
+int startLeft = 11;
+int startTop = 13;
+Checker(startLeft, startTop);
 
-Checker(1, 2, array2d);
-
-void Checker(int startL, int startT, int[,] playingField)
+int Checker(int startL, int startT, string arrow = "@")
 {
+    string empty = new string(' ', arrow.Length);
+    int i = startL;
+    int j = startT;
+    Console.SetCursorPosition(startL, startT);
+    Console.Write(arrow);
     ConsoleKeyInfo key;
-
-    for (int i = startL; i < playingField.GetLength(0); )
+    for (; ; )
     {
-        for (int j = startT; j < playingField.GetLength(1); )
+        for (; ; )
         {
-            Console.SetCursorPosition(i, j);
-
-            key = Console.ReadKey();
+            key = Console.ReadKey(true);
             switch (key.Key)
             {
                 case ConsoleKey.DownArrow:
-                        Console.SetCursorPosition(i, j);
-                        Console.Write(" ", Console.CursorVisible);
-                        if(playingField[i,j] != 1)
-                        {
-                        Console.SetCursorPosition(i, ++j);
-                        Console.Write("@", Console.CursorVisible);
-                        }
+
+                    Console.SetCursorPosition(startL, startT);
+                    Console.Write(empty);
+                    Console.SetCursorPosition(startL, ++startT);
+                    Console.Write(arrow);
                     break;
                 case ConsoleKey.UpArrow:
-                    Console.SetCursorPosition(i, j);
-                    Console.Write(" ", Console.CursorVisible);
-                    Console.SetCursorPosition(i, --j);
-                    Console.Write("@", Console.CursorVisible);
 
+                    Console.SetCursorPosition(startL, startT);
+                    Console.Write(empty);
+                    Console.SetCursorPosition(startL, --startT);
+                    Console.Write(arrow);
+                    break;
                     break;
                 case ConsoleKey.LeftArrow:
                     Console.SetCursorPosition(i, j);
-                    Console.Write(" ", Console.CursorVisible);
+                    Console.WriteLine(" ", Console.CursorVisible);
                     Console.SetCursorPosition(--i, j);
-                    Console.Write("@", Console.CursorVisible);
+                    Console.WriteLine("@", Console.CursorVisible);
 
                     break;
                 case ConsoleKey.RightArrow:
                     Console.SetCursorPosition(i, j);
-                    Console.Write(" ", Console.CursorVisible);
+                    Console.WriteLine(" ", Console.CursorVisible);
                     Console.SetCursorPosition(++i, j);
-                    Console.Write("@", Console.CursorVisible);
+                    Console.WriteLine("@", Console.CursorVisible);
                     break;
+                case ConsoleKey.Enter:
+                    return i + 1 - startL;
             }
         }
     }
