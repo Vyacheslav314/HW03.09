@@ -6,6 +6,7 @@
     <RootNamespace>Доп.ДЗ__10</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    
   </PropertyGroup>
 
 </Project>

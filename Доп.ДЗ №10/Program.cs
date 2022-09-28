@@ -1,26 +1,34 @@
-﻿using System;
-using System.Windows;
-
-int[,] array2d = new int[,]
+﻿int[,] array2d = new int[,]
 {
-    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1 },
-    { 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1 },
-    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1 },
-    { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1 },
-    { 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1 },
-    { 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1 },
-    { 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1 },
-    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    { 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1 },
+    { 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    { 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 },
+    { 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+    { 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1 },
+    { 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1 },
+    { 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1 },
+    { 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1 },
+    { 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1 },
+    { 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1 },
+    { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
 };
 
 PrintArray(array2d);
 
-Checker(1, 2, array2d);
+Checker(2, 1, array2d);
+
+void Spaces(int left, int top)
+{
+    Console.SetCursorPosition(left, top);
+    Console.Write(" ", Console.CursorVisible);
+}
+
+void CursorVis()
+{
+    Console.Write("@", Console.CursorVisible);
+}
 
 void Checker(int startL, int startT, int[,] playingField)
 {
@@ -30,39 +38,46 @@ void Checker(int startL, int startT, int[,] playingField)
     {
         for (int j = startT; j < playingField.GetLength(1); )
         {
-            Console.SetCursorPosition(i, j);
-
+            Console.SetCursorPosition(j, i);
+            if (i == playingField.GetLength(0))
+            {
+                Console.WriteLine("Поздравляю ");
+                return;
+            }
             key = Console.ReadKey();
             switch (key.Key)
             {
                 case ConsoleKey.DownArrow:
-                        Console.SetCursorPosition(i, j);
-                        Console.Write(" ", Console.CursorVisible);
-                        if(playingField[i,j] != 1)
-                        {
-                        Console.SetCursorPosition(i, ++j);
-                        Console.Write("@", Console.CursorVisible);
-                        }
+                    Spaces(j, i);
+                    if (playingField[i, j] != 1)
+                    {
+                        Console.SetCursorPosition(j, ++i);
+                        CursorVis();
+                    }
                     break;
                 case ConsoleKey.UpArrow:
-                    Console.SetCursorPosition(i, j);
-                    Console.Write(" ", Console.CursorVisible);
-                    Console.SetCursorPosition(i, --j);
-                    Console.Write("@", Console.CursorVisible);
-
+                    Spaces(j, i);
+                    if (playingField[i - 2, j] != 1)
+                    {
+                        Console.SetCursorPosition(j, --i);
+                        CursorVis();
+                    }
                     break;
                 case ConsoleKey.LeftArrow:
-                    Console.SetCursorPosition(i, j);
-                    Console.Write(" ", Console.CursorVisible);
-                    Console.SetCursorPosition(--i, j);
-                    Console.Write("@", Console.CursorVisible);
-
+                    Spaces(j, i);
+                    if (playingField[i - 1, j - 1] != 1)
+                    {
+                        Console.SetCursorPosition(--j, i);
+                        CursorVis();
+                    }
                     break;
                 case ConsoleKey.RightArrow:
-                    Console.SetCursorPosition(i, j);
-                    Console.Write(" ", Console.CursorVisible);
-                    Console.SetCursorPosition(++i, j);
-                    Console.Write("@", Console.CursorVisible);
+                    Spaces(j, i);
+                    if (playingField[i - 1, j + 1] != 1)
+                    {
+                        Console.SetCursorPosition(++j, i);
+                        CursorVis();
+                    }
                     break;
             }
         }
