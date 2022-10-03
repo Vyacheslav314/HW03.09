@@ -15,32 +15,44 @@
     { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1 },
 };
 
+int left = 2;
+int top = 1;
+
 PrintArray(array2d);
 
-Checker(2, 1, array2d);
+Checker(left, top, array2d);
 
-void Spaces(int left, int top)
+void Spaces()
+{
+    Console.Write(" ", Console.CursorVisible = false);
+}
+
+void Cursor(int left, int top)
 {
     Console.SetCursorPosition(left, top);
-    Console.Write(" ", Console.CursorVisible);
 }
 
-void CursorVis()
+void Mine()
 {
-    Console.Write("@", Console.CursorVisible);
+    Console.Write("@", Console.CursorVisible == false);
 }
 
-void Checker(int startL, int startT, int[,] playingField)
+void Checker(int startT, int startL, int[,] playingField)
 {
     ConsoleKeyInfo key;
-
-    for (int i = startL; i < playingField.GetLength(0); )
+    for (int i = startT; i < playingField.GetLength(0); )
     {
-        for (int j = startT; j < playingField.GetLength(1); )
-        {
-            Console.SetCursorPosition(j, i);
+        for (int j = startL; j < playingField.GetLength(1); )
+        {  
+            
+            Console.CursorVisible = false;
+            Cursor(j, i);
+            Mine();
+            Cursor(j, i);
+            
             if (i == playingField.GetLength(0))
             {
+                Console.WriteLine();
                 Console.WriteLine("Поздравляю ");
                 return;
             }
@@ -48,35 +60,59 @@ void Checker(int startL, int startT, int[,] playingField)
             switch (key.Key)
             {
                 case ConsoleKey.DownArrow:
-                    Spaces(j, i);
+                    Cursor(j, i);
+                    Spaces();
                     if (playingField[i, j] != 1)
                     {
-                        Console.SetCursorPosition(j, ++i);
-                        CursorVis();
+                        Cursor(j, ++i);
+                        Mine();
+                    }
+                    else
+                    {
+                        Cursor(j, i);
+                        Mine();
                     }
                     break;
                 case ConsoleKey.UpArrow:
-                    Spaces(j, i);
+                    Cursor(j, i);
+                    Spaces();
                     if (playingField[i - 2, j] != 1)
                     {
-                        Console.SetCursorPosition(j, --i);
-                        CursorVis();
+                        Cursor(j, --i);
+                        Mine();
+                    }
+                    else
+                    {
+                        Cursor(j, i);
+                        Mine();
                     }
                     break;
                 case ConsoleKey.LeftArrow:
-                    Spaces(j, i);
+                    Cursor(j, i);
+                    Spaces();
                     if (playingField[i - 1, j - 1] != 1)
                     {
-                        Console.SetCursorPosition(--j, i);
-                        CursorVis();
+                        Cursor(--j, i);
+                        Mine();
+                    }
+                    else
+                    {
+                        Cursor(j, i);
+                        Mine();
                     }
                     break;
                 case ConsoleKey.RightArrow:
-                    Spaces(j, i);
+                    Cursor(j, i);
+                    Spaces();
                     if (playingField[i - 1, j + 1] != 1)
                     {
-                        Console.SetCursorPosition(++j, i);
-                        CursorVis();
+                        Cursor(++j, i);
+                        Mine();
+                    }
+                    else
+                    {
+                        Cursor(j, i);
+                        Mine();
                     }
                     break;
             }
